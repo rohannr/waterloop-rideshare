@@ -2,3 +2,4 @@
 *.properties
 *.settings
 *.swp
+*/gen/*
