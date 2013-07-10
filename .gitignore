@@ -3,3 +3,4 @@
 *.settings
 *.swp
 */gen/*
+waterloop/bin/*
