@@ -2,7 +2,8 @@
     <string name="app_name">waterloop</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_home_activity">Waterloop</string>
     <string name="app_id">510888032292412</string>
 	<string name="get_started">To get started, log in using Facebook</string>
+	<string name="settings">Settings</string>
 </resources>
