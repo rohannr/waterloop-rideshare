@@ -23,7 +23,9 @@ import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +45,6 @@ public class SelectionFragment extends Fragment {
 	
 	private String[] userParams = new String[2];
 
-	private registerTask reg = new registerTask();
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
 
@@ -67,7 +68,32 @@ public class SelectionFragment extends Fragment {
 		if (session != null && session.isOpened()) {
 			// Get the user's data
 			makeMeRequest(session);
+			new registerTask().execute(userParams);
 		}
+		
+		
+		Button postButton = (Button) view.findViewById(R.id.post_ride_button);
+		postButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+				getActivity().startActivity(intent);
+			}
+		});
+		
+		Button searchButton = (Button) view.findViewById(R.id.search_button);
+		searchButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+
+				Intent intent = new Intent(getActivity().getApplicationContext(), SearchActivity.class);
+				getActivity().startActivity(intent);
+			}
+		});
+		
 		return view;
 	}
 
@@ -90,8 +116,6 @@ public class SelectionFragment extends Fragment {
 						userNameView.setText(user.getName());
 						userParams[0] = user.getName();
 						userParams[1] = user.getId();
-
-						reg.execute(userParams);
 					}
 				}
 				if (response.getError() != null) {

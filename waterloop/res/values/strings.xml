@@ -6,4 +6,18 @@
     <string name="app_id">510888032292412</string>
 	<string name="get_started">To get started, log in using Facebook</string>
 	<string name="settings">Settings</string>
+	
+	<string-array name="city_array">
+        <item>Toronto</item>
+        <item>Waterloo</item>
+        <item>Hamilton</item>
+        <item>Windsor</item>
+        <item>Burlington</item>
+        <item>Singapore</item>
+destination_picker_promptdestination_picker_prompt    </string-array>
+	<string name="destination_picker_prompt">To</string>
+	<string name="origin_picker_prompt">From</string>
+	<string name="search_btn_text">Search</string>
+	<string name="post_btn_text">Post Ride</string>
+	
 </resources>
