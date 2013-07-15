@@ -194,7 +194,7 @@ public class SelectionFragment extends Fragment {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("user[name]", user));
 				nameValuePairs.add(new BasicNameValuePair("user[fb_id]", user_id));
-				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "Y7Y0RpSphkkpeGKYj/lqE+soHITuAHcHvnqcWTURmms="));
+				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
 				nameValuePairs.add(new BasicNameValuePair("commit", "Create user"));
 				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
