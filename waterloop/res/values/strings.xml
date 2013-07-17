@@ -19,5 +19,7 @@ destination_picker_promptdestination_picker_prompt    </string-array>
 	<string name="origin_picker_prompt">From</string>
 	<string name="search_btn_text">Search</string>
 	<string name="post_btn_text">Post Ride</string>
+	<string name="seats_field_hint_text"># seats</string>
+	<string name="price_field_hint_text">Price($)</string>
 	
 </resources>

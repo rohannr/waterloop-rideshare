@@ -2,24 +2,47 @@ package com.waterloop;
 
 import java.util.Date;
 
+import com.facebook.model.GraphUser;
+
 public class Ride {
 
 	private String origin;
 	private String dest;
-	private Date date;
-	private String driver;
+	private long date;
+	private GraphUser driver;
 	private String[] passengers;
+	private int numSeats;
+	private int seatsLeft;
+	private int price;
 	
-	public Ride(String origin, String dest, Date date, String driver,
-			String[] passengers) {
+	public Ride(String origin, String dest, long date, GraphUser driver,
+			String[] passengers, int price, int numSeats) {
 		super();
 		this.origin = origin;
 		this.dest = dest;
 		this.date = date;
 		this.driver = driver;
 		this.passengers = passengers;
+		this.numSeats = numSeats;
+		this.seatsLeft = numSeats - passengers.length;
 	}
 	
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public int getNumSeats() {
+		return numSeats;
+	}
+
+	public int getSeatsLeft() {
+		return seatsLeft;
+	}
+
 	public String getOrigin() {
 		return origin;
 	}
@@ -32,16 +55,16 @@ public class Ride {
 	public void setDest(String dest) {
 		this.dest = dest;
 	}
-	public Date getDate() {
+	public long getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(long date) {
 		this.date = date;
 	}
-	public String getDriver() {
+	public GraphUser getDriver() {
 		return driver;
 	}
-	public void setDriver(String driver) {
+	public void setDriver(GraphUser driver) {
 		this.driver = driver;
 	}
 	public String[] getPassengers() {

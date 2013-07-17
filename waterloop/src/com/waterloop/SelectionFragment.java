@@ -63,7 +63,6 @@ public class SelectionFragment extends Fragment {
 		// Find the user's name view
 		userNameView = (TextView) view.findViewById(R.id.selection_user_name);
 
-
 		Session session = Session.getActiveSession();
 		if (session != null && session.isOpened()) {
 			// Get the user's data
@@ -116,6 +115,7 @@ public class SelectionFragment extends Fragment {
 						userNameView.setText(user.getName());
 						userParams[0] = user.getName();
 						userParams[1] = user.getId();
+						UserProfileSettings.getUserProfileSettings().setName(user.getName());
 					}
 				}
 				if (response.getError() != null) {
@@ -194,7 +194,7 @@ public class SelectionFragment extends Fragment {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("user[name]", user));
 				nameValuePairs.add(new BasicNameValuePair("user[fb_id]", user_id));
-				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
+//				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
 				nameValuePairs.add(new BasicNameValuePair("commit", "Create user"));
 				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

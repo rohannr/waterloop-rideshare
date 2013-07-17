@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
+
     <Spinner
         android:id="@+id/origin_picker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/city_array"
         android:prompt="@string/origin_picker_prompt" />
-    
+
     <Spinner
         android:id="@+id/destination_picker"
         android:layout_width="match_parent"
@@ -22,6 +22,31 @@
         android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:id="@+id/price_seats"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <EditText
+            android:id="@+id/price_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:hint="@string/price_field_hint_text" >
+        </EditText>
+
+        <EditText
+            android:id="@+id/seats_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"
+            android:hint="@string/seats_field_hint_text"  >
+        </EditText>
+    </LinearLayout>
 
     <Button
         android:id="@+id/post_btn"
