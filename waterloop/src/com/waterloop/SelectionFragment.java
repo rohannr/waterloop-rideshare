@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -67,7 +68,6 @@ public class SelectionFragment extends Fragment {
 		if (session != null && session.isOpened()) {
 			// Get the user's data
 			makeMeRequest(session);
-			new registerTask().execute(userParams);
 		}
 		
 		
@@ -93,6 +93,7 @@ public class SelectionFragment extends Fragment {
 			}
 		});
 		
+//		new registerTask().execute(userParams);
 		return view;
 	}
 
@@ -111,11 +112,15 @@ public class SelectionFragment extends Fragment {
 						// Set the id for the ProfilePictureView
 						// view that in turn displays the profile picture.
 						profilePictureView.setProfileId(user.getId());
+						System.out.println(user.getId());
 						// Set the Textview's text to the user's name.
 						userNameView.setText(user.getName());
 						userParams[0] = user.getName();
 						userParams[1] = user.getId();
 						UserProfileSettings.getUserProfileSettings().setName(user.getName());
+						UserProfileSettings.getUserProfileSettings().setFbId((user.getId()));
+						new registerTask().execute(userParams);
+
 					}
 				}
 				if (response.getError() != null) {
@@ -176,6 +181,7 @@ public class SelectionFragment extends Fragment {
 	public class registerTask extends AsyncTask<String, Void, Void> {
 
 		private HttpClient client = new DefaultHttpClient();
+		HttpResponse response;
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -198,14 +204,32 @@ public class SelectionFragment extends Fragment {
 				nameValuePairs.add(new BasicNameValuePair("commit", "Create user"));
 				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
+				
+				Log.i("registerTask", "HELKHJSLDKFHLF");
+				
+				Log.i("registerTask","User:" + user);
+				Log.i("registerTask","UserID: " + user_id);
 				// Execute HTTP Post Request
-				HttpResponse response = client.execute(post);
-
+				response = client.execute(post);
+				
+				
 			} catch (IOException e) {
 		        // TODO Auto-generated catch block
 		    }
 
 			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
+				Toast t = Toast.makeText(getActivity(), "Registration unsuccessful", Toast.LENGTH_LONG);
+				t.show();
+			}
+			System.out.println(response.getStatusLine());
+			
 		}
 		
 	}

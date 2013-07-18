@@ -66,14 +66,14 @@ public class PostActivity extends Activity {
 				String from = origin.getSelectedItem().toString();
 				String to = destination.getSelectedItem().toString();
 				
-				date = new Date(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime();
+				date = new Date(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime()/1000; //divide to get UNIX epoch
 				System.out.println(UserProfileSettings.getUserProfileSettings().getName());
 				System.out.println(from);
 				System.out.println(to);
 				System.out.println(date);
 				System.out.println(price);
 				System.out.println(numSeats);
-				postRide(UserProfileSettings.getUserProfileSettings().getName(), from, to, date, price.getText().toString(), numSeats.getText().toString());
+				postRide(UserProfileSettings.getUserProfileSettings().getFbId(), from, to, date, price.getText().toString(), numSeats.getText().toString());
 			}
 		});
 		

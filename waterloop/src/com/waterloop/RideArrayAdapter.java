@@ -1,14 +1,24 @@
 package com.waterloop;
 
-import com.facebook.widget.ProfilePictureView;
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONObject;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.facebook.widget.ProfilePictureView;
 
 public class RideArrayAdapter extends ArrayAdapter<Ride> {
 
@@ -33,17 +43,18 @@ public class RideArrayAdapter extends ArrayAdapter<Ride> {
 			
 			
 			TextView seatsLeft = (TextView) rowView.findViewById(R.id.seats_left);
-			seatsLeft.setText(rides[position].getSeatsLeft() + " / seats left");
+			seatsLeft.setText(rides[position].getSeatsLeft() + " seats left");
+			
+			TextView price = (TextView) rowView.findViewById(R.id.price);
+			price.setText("$"+ rides[position].getPrice());
 
-//			ProfilePictureView driver_photo = (ProfilePictureView) rowView.findViewById(R.id.driver_photo);
-//			driver_photo.setCropped(true);
-//
-//			driver_photo.setProfileId(rides[position].getDriver().getId());
+
+			ProfilePictureView driver_photo = (ProfilePictureView) rowView.findViewById(R.id.driver_pic);
+			driver_photo.setCropped(true);
+			driver_photo.setProfileId(rides[position].getDriver());
 			
 			
 			return rowView;
 	}
-	
-	
 
 }

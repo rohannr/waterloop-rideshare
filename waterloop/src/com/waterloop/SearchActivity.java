@@ -65,7 +65,7 @@ public class SearchActivity extends Activity {
 				// TODO Auto-generated method stub
 				String from = origin.getSelectedItem().toString();
 				String to = destination.getSelectedItem().toString();
-				date = new Date(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime();
+				date = new Date(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime()/1000;
 				String[] params = new String[]{ from, to, String.valueOf(date)};
 				//make call to server
 				new searchTask(context).execute(params);
@@ -75,9 +75,10 @@ public class SearchActivity extends Activity {
 	}
 
 
-	public class searchTask extends AsyncTask<String, Void, Boolean> {
+	public class searchTask extends AsyncTask<String, Void, Ride[]> {
 		private static final String SEARCH_RIDE_URL = "http://testapi.spearmunkie.com/search";
 		private ProgressDialog loadSpinner;
+		private Ride[] rides;
 		private Context context;
 		private HttpClient client;
 
@@ -85,8 +86,9 @@ public class SearchActivity extends Activity {
 
 		public searchTask(Context context) {
 			this.context = context;
+			this.rides = null;
 			//			this.loadSpinner = new ProgressDialog(context);
-			client = new DefaultHttpClient();
+			this.client = new DefaultHttpClient();
 			HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
 		}
 
@@ -96,58 +98,95 @@ public class SearchActivity extends Activity {
 		}
 
 		@Override
-		protected Boolean doInBackground(String... params) {
+		protected Ride[] doInBackground(String... params) {
 
-			InputStream inputStream = null;
 
 			try {
 				HttpPost post = new HttpPost(SEARCH_RIDE_URL);
-				post.setHeader("Content-type", "application/json");
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("origin", params[0]));
 				nameValuePairs.add(new BasicNameValuePair("destination", params[1]));
 				nameValuePairs.add(new BasicNameValuePair("date", params[2]));
+				System.out.println("Search EPOCH: " + date);
 				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				HttpResponse response = client.execute(post);
 
-				JSONArray jsonSearchResults = new JSONArray(readResponse(response));
-				Log.i(SearchActivity.class.getName(),
-						"Number of entries " + jsonSearchResults.length());
-				for (int i = 0; i < jsonSearchResults.length(); i++) {
-					JSONObject jsonObject = jsonSearchResults.getJSONObject(i);
-					Log.i(SearchActivity.class.getName(), jsonObject.getString("id"));
-				}																																																																																																				
 				System.out.println(response.getStatusLine());
+																																																																																									
 				if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
-					return false;
+					return null;
 				} else {
-					System.out.println(EntityUtils.toString(response.getEntity()));
+					JSONArray jsonSearchResults = new JSONArray(readResponse(response));
+					this.rides = new Ride[jsonSearchResults.length()];
+					this.rides = makeRideArray(jsonSearchResults);
+//					System.out.println(EntityUtils.toString(response.getEntity()));
 				}
 
 			} catch (IOException e) {
 				// TODO: handle exception
 				System.out.println("ERROR: ");
-				return false;
+				return null;
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
-			return true;
+			return rides;
+		}
+
+		private Ride[] makeRideArray(JSONArray jsonSearchResults) {
+			int len = jsonSearchResults.length();
+			Ride[] result = new Ride[len];
+			
+			for (int i = 0; i < jsonSearchResults.length(); i++) {
+				try {
+					JSONObject jsonObject = jsonSearchResults.getJSONObject(i);
+					String name = jsonObject.getString("driver");
+					String origin = jsonObject.getString("origin");
+					String destination = jsonObject.getString("dest");
+					String rideID = jsonObject.getString("id");
+					int price = Integer.parseInt(jsonObject.getString("price"));
+					int numSeats = Integer.parseInt(jsonObject.getString("seats"));
+					long date = jsonObject.getLong("date");
+//					JSONArray passengers = (JSONArray) jsonObject.get("passengers");
+					
+					
+					System.out.println(name);
+					System.out.println(origin);
+					System.out.println(destination);
+					System.out.println(price);
+					System.out.println(numSeats);
+
+
+					
+					//possibly unnecessary
+//					if(passengers.length == 0){
+//						passengers = null;
+//					}
+					Ride ride = new Ride(origin, destination, date, name, null, price, numSeats, rideID);
+					result[i] = ride;
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			return result;
 		}
 
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(Ride[] result) {
 			super.onPostExecute(result);
-			loadSpinner.dismiss();
-			if(result){
-				Toast t = Toast.makeText(getApplicationContext(), "Search successful", Toast.LENGTH_LONG);
+			if(result!= null){
+				Toast t = Toast.makeText(getApplicationContext(), "Search successful", Toast.LENGTH_SHORT);
 				t.show();
 			} else {
-				Toast t = Toast.makeText(getApplicationContext(), "Error searching ride", Toast.LENGTH_LONG);
+				Toast t = Toast.makeText(getApplicationContext(), "No rides found", Toast.LENGTH_SHORT);
 				t.show();
 			}
+			loadSpinner.dismiss();
 			Intent intent = new Intent(SearchActivity.this, RidesDisplayActivity.class);
+			intent.putExtra("rides", this.rides);
 			startActivity(intent);
 		}
 

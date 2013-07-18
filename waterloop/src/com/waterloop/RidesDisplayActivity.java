@@ -9,21 +9,25 @@ import android.view.View;
 import android.widget.ListView;
 
 public class RidesDisplayActivity extends ListActivity {
-
-	private Ride[] rides; 
+	private Ride[] rides=null; 
 	private ProgressDialog loadingDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		
-		rides = new Ride[1];
+		Bundle b  = getIntent().getExtras();
+		Parcelable[] rideExtras =  b.getParcelableArray("rides");
+		System.out.println("Length of parcel: " + rideExtras.length);
+			
+		rides = new Ride[rideExtras.length];
+		for(int i=0; i < rides.length;i++){
+			rides[i] = (Ride) rideExtras[i];
+		}
+
 		setListAdapter(new RideArrayAdapter(this, rides));
-		
 		ListView rideListView = getListView();
 		rideListView.setTextFilterEnabled(true);
-		
+
 	}
 	
 	@Override
@@ -31,7 +35,7 @@ public class RidesDisplayActivity extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 		Ride selectedRide = rides[position];
 		Intent openRide = new Intent(RidesDisplayActivity.this, RideActivity.class);
-//		openRide.putExtra("Ride", selectedRide);
+		openRide.putExtra(Ride.RIDE_PARCEL_KEY, selectedRide);
 		startActivity(openRide);
 	}
 	
