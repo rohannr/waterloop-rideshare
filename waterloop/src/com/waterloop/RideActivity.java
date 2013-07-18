@@ -72,7 +72,7 @@ public class RideActivity extends Activity {
 		rideDriver.setText(getDriverName());
 
 		TextView rideDesc = (TextView) findViewById(R.id.seats_desc);
-		rideDesc.setText(ride.getSeatsLeft() + " / " + ride.getNumSeats() + "available");
+		rideDesc.setText(ride.getSeatsLeft() + " / " + ride.getNumSeats() + " seats available");
 		
 		
 		SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
