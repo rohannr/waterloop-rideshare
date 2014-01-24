@@ -38,7 +38,7 @@ public class PostActivity extends Activity {
 	
 	private Ride ride;
 
-	private static final String POST_RIDE_URL = "http://testapi.spearmunkie.com/createRide";
+	private static final String POST_RIDE_URL = "http://waterloop.sidprak.com/createRide";
 	
 	private long date;
 	private GraphUser driver;

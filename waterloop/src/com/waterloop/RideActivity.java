@@ -47,7 +47,7 @@ public class RideActivity extends Activity {
 	private Ride ride;
 
 	private static final String GRAPH_ID_URL = "http://graph.facebook.com/";
-	private static final String JOIN_RIDE_URL = "http://testapi.spearmunkie.com/addPassenger";
+	private static final String JOIN_RIDE_URL = "http://waterloop.sidprak.com/addPassenger";
 	//		passenger_id: string
 	//	ride_id: string
 
@@ -75,8 +75,8 @@ public class RideActivity extends Activity {
 		rideDesc.setText(ride.getSeatsLeft() + " / " + ride.getNumSeats() + " seats available");
 		
 		
-		SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
-		String d = formatter.format(new Date(ride.getDate()));
+		SimpleDateFormat formatter = new SimpleDateFormat("dd MMM");
+		String d = formatter.format(new Date(ride.getDate()*1000));
 		TextView rideDate = (TextView) findViewById(R.id.ride_date);
 		rideDate.setText(d);
 		

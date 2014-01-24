@@ -31,6 +31,7 @@ public class Ride implements Parcelable{
 		this.numSeats = numSeats;
 //		this.seatsLeft = numSeats - passengers.length;
 		this.seatsLeft = numSeats;
+		this.price=price;
 		this.rideId = rideId;
 	}
 	

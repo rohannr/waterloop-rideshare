@@ -14,12 +14,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.text.InputFilter.LengthFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,14 +41,16 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.waterloop.network.NetworkUtils;
 
-public class SelectionFragment extends Fragment {
+public class SelectionFragment extends ListFragment {
 
 	private static final String TAG = "SelectionFragment";
-	private static final String REGISTER_USER_URL = "http://testapi.spearmunkie.com/users";
+	private static final String REGISTER_USER_URL = "http://waterloop.sidprak.com/users";
 	private static final int REAUTH_ACTIVITY_CODE = 100;
-	
+
 	private String[] userParams = new String[2];
+	private Ride[] currentRides;
 
 	private ProfilePictureView profilePictureView;
 	private TextView userNameView;
@@ -69,11 +75,11 @@ public class SelectionFragment extends Fragment {
 			// Get the user's data
 			makeMeRequest(session);
 		}
-		
-		
+
+
 		Button postButton = (Button) view.findViewById(R.id.post_ride_button);
 		postButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 
@@ -81,10 +87,10 @@ public class SelectionFragment extends Fragment {
 				getActivity().startActivity(intent);
 			}
 		});
-		
+
 		Button searchButton = (Button) view.findViewById(R.id.search_button);
 		searchButton.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 
@@ -92,9 +98,38 @@ public class SelectionFragment extends Fragment {
 				getActivity().startActivity(intent);
 			}
 		});
-		
-//		new registerTask().execute(userParams);
+
+		//		new registerTask().execute(userParams);
 		return view;
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onActivityCreated(savedInstanceState);
+		ListView rideListView = getListView();
+		//		new ShowRideTask().execute();
+
+		//		System.out.println("Rides: " + currentRides.length);
+
+		if(currentRides != null){
+			setListAdapter(new RideArrayAdapter(getActivity(), currentRides));
+			rideListView.setTextFilterEnabled(true);
+		} else {
+			TextView noRidesMessage = (TextView) getActivity().findViewById(R.id.no_ride_text_view);
+			//			rideListView.setVisibility(View.GONE);
+			//			noRidesMessage.setVisibility(View.VISIBLE);
+		}
+
+	}
+	
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		Ride selectedRide = currentRides[position];
+		Intent openRide = new Intent(getActivity(), RideActivity.class);
+		openRide.putExtra(Ride.RIDE_PARCEL_KEY, selectedRide);
+		startActivity(openRide);
 	}
 
 
@@ -176,7 +211,7 @@ public class SelectionFragment extends Fragment {
 		if (requestCode == REAUTH_ACTIVITY_CODE) {
 			uiHelper.onActivityResult(requestCode, resultCode, data);
 		}
-	}
+	}user
 
 	public class registerTask extends AsyncTask<String, Void, Void> {
 
@@ -200,26 +235,23 @@ public class SelectionFragment extends Fragment {
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				nameValuePairs.add(new BasicNameValuePair("user[name]", user));
 				nameValuePairs.add(new BasicNameValuePair("user[fb_id]", user_id));
-//				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
+				//				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
 				nameValuePairs.add(new BasicNameValuePair("commit", "Create user"));
 				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-				
-				Log.i("registerTask", "HELKHJSLDKFHLF");
-				
 				Log.i("registerTask","User:" + user);
 				Log.i("registerTask","UserID: " + user_id);
 				// Execute HTTP Post Request
 				response = client.execute(post);
-				
-				
+
+
 			} catch (IOException e) {
-		        // TODO Auto-generated catch block
-		    }
+				// TODO Auto-generated catch block
+			}
 
 			return null;
 		}
-		
+
 		@Override
 		protected void onPostExecute(Void result) {
 			// TODO Auto-generated method stub
@@ -229,8 +261,71 @@ public class SelectionFragment extends Fragment {
 				t.show();
 			}
 			System.out.println(response.getStatusLine());
-			
+			new ShowRideTask().execute();
+
 		}
-		
+
+	}
+
+
+	public class ShowRideTask extends AsyncTask<Void, Void, Boolean> {
+
+		private HttpClient client = new DefaultHttpClient();
+		private static final String SHOW_RIDES_URL = "http://waterloop.sidprak.com/userRides";
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+			super.onPreExecute();
+		}
+
+		@Override
+		protected Boolean doInBackground(Void... params) {
+
+			try{
+				// TODO Auto-generated method stub
+				HttpPost post = new HttpPost(SHOW_RIDES_URL);
+				List<NameValuePair> param = new ArrayList<NameValuePair>();
+				System.out.println(UserProfileSettings.getUserProfileSettings().getFbId());
+				param.add(new BasicNameValuePair("user_id", UserProfileSettings.getUserProfileSettings().getFbId()));
+				post.setEntity(new UrlEncodedFormEntity(param));
+
+				// Execute HTTP Post Request
+				HttpResponse response = client.execute(post);
+				System.out.println("SHOW RIDES RESPONSE: " + response.getStatusLine());
+				if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK){
+					return false;
+				} else {
+					currentRides = NetworkUtils.makeRideArray(response);
+				}
+
+			} catch (IOException e) {
+				// TODO: handle exceptionconversation
+				System.out.println("ERROR: ");
+				return false;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("ERROR: JSON");
+			}
+
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			super.onPostExecute(result);
+			TextView noRides = (TextView) getActivity().findViewById(R.id.no_ride_text_view);
+
+			if(currentRides == null){
+				noRides.setVisibility(View.VISIBLE);
+				return;
+			}
+			
+			if(true){
+				setListAdapter(new RideArrayAdapter(getActivity(), currentRides));
+			} 
+		}
 	}
 }

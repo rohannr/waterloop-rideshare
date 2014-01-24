@@ -28,8 +28,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class ConversationActivity extends Activity {
-	private static final String POST_MSG_URL = "http://testapi.spearmunkie.com/message";
-	private static final String GET_MSG_URL = "http://testapi.spearmunkie.com/conversation";
+	private static final String POST_MSG_URL = "http://waterloop.sidprak.com/message";
+	private static final String GET_MSG_URL = "http://waterloop.sidprak.com/conversation";
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		

@@ -23,6 +23,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.waterloop.network.NetworkUtils;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -76,7 +78,7 @@ public class SearchActivity extends Activity {
 
 
 	public class searchTask extends AsyncTask<String, Void, Ride[]> {
-		private static final String SEARCH_RIDE_URL = "http://testapi.spearmunkie.com/search";
+		private static final String SEARCH_RIDE_URL = "http://waterloop.sidprak.com/search";
 		private ProgressDialog loadSpinner;
 		private Ride[] rides;
 		private Context context;
@@ -151,11 +153,11 @@ public class SearchActivity extends Activity {
 //					JSONArray passengers = (JSONArray) jsonObject.get("passengers");
 					
 					
-					System.out.println(name);
-					System.out.println(origin);
-					System.out.println(destination);
-					System.out.println(price);
-					System.out.println(numSeats);
+//					System.out.println(name);
+//					System.out.println(origin);
+//					System.out.println(destination);
+//					System.out.println(price);
+//					System.out.println(numSeats);
 
 
 					

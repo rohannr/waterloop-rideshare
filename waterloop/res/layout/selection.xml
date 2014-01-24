@@ -44,4 +44,30 @@
         android:gravity="center_vertical"
         android:text="Search Rides" />
 
+    <TextView
+        android:id="@+id/ride_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingLeft="10dp"
+        android:background="@color/com_facebook_blue"
+        android:textColor="#fff"
+        android:text="Current Rides"
+        android:textSize="25dp" />
+    
+    <ListView 
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+    
+    <TextView
+        android:id="@+id/no_ride_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No active rides"
+        android:visibility="gone">
+    </TextView>
+
 </LinearLayout>
