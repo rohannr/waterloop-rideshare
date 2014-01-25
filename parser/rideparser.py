@@ -19,6 +19,7 @@ for ride in feed:
 #             '(\w+)\s-+>\s([\w\s]+)']), message)
 
     capture = re.findall('from\s([\w\s]+)to\s([\w\s]+)', message)
+
     try:
         origin = capture[0][0] or 'Waterloo'
         destination = capture[0][1] or ''

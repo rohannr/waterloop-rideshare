@@ -88,7 +88,7 @@ public class PostActivity extends Activity {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject json = new JSONObject();
 		try {
-			json.put("driverId", fbid);
+			json.put("driver_id", fbid);
 			json.put("origin", from);
 			json.put("destination", to);
 			json.put("datetime", dateInMillis);
