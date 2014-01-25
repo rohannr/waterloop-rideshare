@@ -41,13 +41,18 @@ def rides(request):
         return HttpResponse(json.dumps({'id' : r.pk}))
 
 def search(request):
+    print 'data: %s' % request.raw_post_data
     params = json.loads(request.raw_post_data)
+    rideDate = datetime.datetime.fromtimestamp(float(params['datetime']))
     
-    Ride.objects.filter(
-        origin__icontains='waterloo'
+    r = [str(ride) for ride in Ride.objects.filter(
+        origin__icontains=params['origin']
     ).filter(
-        destination__icontains='toronto'
-    )
+        destination__icontains=params['destination']
+    ).filter(
+        datetime__year=rideDate.year,
+        datetime__month=rideDate.month,
+        datetime__day=rideDate.day
+    )]
     
-   
-    return HttpResponse(request.raw_post_data)
+    return HttpResponse(r)

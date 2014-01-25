@@ -1,5 +1,6 @@
 from django.db import models
 
+import datetime
 import json
 
 class User(models.Model):
@@ -18,3 +19,15 @@ class Ride(models.Model):
     numSeats = models.IntegerField(blank=False, null=False)
     price = models.IntegerField(blank=False, null=False)
     link = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        passengers = self.passengers.all()
+        passData = [{'fbId' : p.fbId, 'name' : p.name} for p in passengers]
+        return json.dumps({'origin' : self.origin,
+'destination' : self.destination,
+'datetime' : self.datetime.strftime('%s'),
+'driver' : self.driver.fbId,
+'passengers' : passData,
+'numSeats' : self.numSeats,
+'price' : self.price,
+'link' : self.link})
