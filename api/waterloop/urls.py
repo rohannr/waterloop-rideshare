@@ -7,6 +7,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^users/$', 'waterloop_app.views.user_index'),
     url(r'^users/(?P<userId>\d+)/$', 'waterloop_app.views.user_detail'),
+    url(r'^search/$', 'waterloop_app.views.search'),
+    url(r'^rides/$', 'waterloop_app.views.rides'),
     # Examples:
     # url(r'^$', 'waterloop.views.home', name='home'),
     # url(r'^waterloop/', include('waterloop.foo.urls')),

@@ -10,10 +10,11 @@ class User(models.Model):
         return json.dumps({'fbId' : self.fbId, 'name' : self.name})
 
 class Ride(models.Model):
-    source = models.CharField(blank=False, null=False, max_length=50)
-    dest = models.CharField(blank=False, null=False, max_length=50)
+    origin = models.CharField(blank=False, null=False, max_length=50)
+    destination = models.CharField(blank=False, null=False, max_length=50)
     datetime = models.DateTimeField(blank=False, null=False)
-    drive = models.ForeignKey(User, related_name='driver')
+    driver = models.ForeignKey(User, related_name='driver')
     passengers = models.ManyToManyField(User, related_name='passengers')
     numSeats = models.IntegerField(blank=False, null=False)
     price = models.IntegerField(blank=False, null=False)
+    link = models.CharField(max_length=255)
