@@ -14,11 +14,9 @@ def user_index(request):
             u = User(**postData)
             u.save()
         except Exception, e:
-            # TODO: Custom 500 page
-            return HttpResponse(str(e))
+            return HttpResponseBadRequest(str(e))
 
         return HttpResponse(json.dumps({'id' : u.id}))
-#        return HttpResponse(request.raw_post_data)
     elif request.method == 'GET':
         return HttpResponse("List of users! yay!")
 
@@ -36,7 +34,7 @@ def rides(request):
             r = Ride(**postData)
             r.save()
         except Exception, e:
-            return HttpResponse(str(e))
+            return HttpResponseBadRequest(str(e))
 
         return HttpResponse(json.dumps({'id' : r.pk}))
 
