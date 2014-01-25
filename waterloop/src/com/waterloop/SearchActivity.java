@@ -15,6 +15,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
@@ -78,7 +79,7 @@ public class SearchActivity extends Activity {
 
 
 	public class searchTask extends AsyncTask<String, Void, Ride[]> {
-		private static final String SEARCH_RIDE_URL = "http://waterloop.sidprak.com/search";
+		private static final String SEARCH_RIDE_URL = "http://waterloop.sidprak.com/search/";
 		private ProgressDialog loadSpinner;
 		private Ride[] rides;
 		private Context context;
@@ -105,12 +106,13 @@ public class SearchActivity extends Activity {
 
 			try {
 				HttpPost post = new HttpPost(SEARCH_RIDE_URL);
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				nameValuePairs.add(new BasicNameValuePair("origin", params[0]));
-				nameValuePairs.add(new BasicNameValuePair("destination", params[1]));
-				nameValuePairs.add(new BasicNameValuePair("date", params[2]));
+				JSONObject json = new JSONObject();
+				json.put("origin", params[0]);
+				json.put("destination", params[1]);
+				json.put("datetime", params[2]);
 				System.out.println("Search EPOCH: " + date);
-				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+				post.setEntity(new StringEntity(json.toString()));
+//				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 				HttpResponse response = client.execute(post);
 
 				System.out.println(response.getStatusLine());

@@ -5,3 +5,4 @@
 *.pyc
 */gen/*
 */bin/*
+*/facebook-sdk/*

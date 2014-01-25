@@ -69,7 +69,8 @@ public class PostActivity extends Activity {
 				String from = origin.getSelectedItem().toString();
 				String to = destination.getSelectedItem().toString();
 				
-				date = new Date(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime()/1000; //divide to get UNIX epoch
+				date = new Date(dp.getYear() - 1900, dp.getMonth(), dp.getDayOfMonth()).getTime()/1000; //divide to get UNIX epoch
+				System.out.println(String.valueOf(dp.getYear()) + ':' + String.valueOf(dp.getMonth())+ ':' + String.valueOf(dp.getDayOfMonth()));
 				System.out.println(UserProfileSettings.getUserProfileSettings().getName());
 				System.out.println(from);
 				System.out.println(to);
@@ -131,6 +132,7 @@ public class PostActivity extends Activity {
 			try{
 			// TODO Auto-generated method stub
 			HttpPost post = new HttpPost(POST_RIDE_URL);
+			System.out.println(params[0]);
 			post.setEntity(new StringEntity(params[0]));
 
 			// Execute HTTP Post Request
