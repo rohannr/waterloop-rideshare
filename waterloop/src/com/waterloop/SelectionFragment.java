@@ -46,7 +46,7 @@ import com.waterloop.network.NetworkUtils;
 public class SelectionFragment extends ListFragment {
 
 	private static final String TAG = "SelectionFragment";
-	private static final String REGISTER_USER_URL = "http://waterloop.sidprak.com/users";
+	private static final String REGISTER_USER_URL = "http://waterloop.sidprak.com/users/";
 	private static final int REAUTH_ACTIVITY_CODE = 100;
 
 	private String[] userParams = new String[2];
@@ -211,7 +211,7 @@ public class SelectionFragment extends ListFragment {
 		if (requestCode == REAUTH_ACTIVITY_CODE) {
 			uiHelper.onActivityResult(requestCode, resultCode, data);
 		}
-	}user
+	}
 
 	public class registerTask extends AsyncTask<String, Void, Void> {
 
@@ -233,11 +233,21 @@ public class SelectionFragment extends ListFragment {
 			try {
 				HttpPost post = new HttpPost(REGISTER_USER_URL);
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-				nameValuePairs.add(new BasicNameValuePair("user[name]", user));
-				nameValuePairs.add(new BasicNameValuePair("user[fb_id]", user_id));
+				JSONObject json = new JSONObject();
+				try {
+					json.put("name", user);
+					json.put("fbId", user_id);
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				post.setEntity(new StringEntity(json.toString()));
+				
+//				nameValuePairs.add(new BasicNameValuePair("name", user));
+//				nameValuePairs.add(new BasicNameValuePair("fbId", user_id));
 				//				nameValuePairs.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
-				nameValuePairs.add(new BasicNameValuePair("commit", "Create user"));
-				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//				post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 				Log.i("registerTask","User:" + user);
 				Log.i("registerTask","UserID: " + user_id);
@@ -271,7 +281,7 @@ public class SelectionFragment extends ListFragment {
 	public class ShowRideTask extends AsyncTask<Void, Void, Boolean> {
 
 		private HttpClient client = new DefaultHttpClient();
-		private static final String SHOW_RIDES_URL = "http://waterloop.sidprak.com/userRides";
+		private static final String SHOW_RIDES_URL = "http://waterloop.sidprak.com/userRides/";
 
 		@Override
 		protected void onPreExecute() {

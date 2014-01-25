@@ -11,9 +11,12 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -38,7 +41,7 @@ public class PostActivity extends Activity {
 	
 	private Ride ride;
 
-	private static final String POST_RIDE_URL = "http://waterloop.sidprak.com/createRide";
+	private static final String POST_RIDE_URL = "http://waterloop.sidprak.com/rides/";
 	
 	private long date;
 	private GraphUser driver;
@@ -79,25 +82,39 @@ public class PostActivity extends Activity {
 		
 	}
 
-	protected void postRide(String name, String from, String to, long dateInMillis,
+	protected void postRide(String fbid, String from, String to, long dateInMillis,
 			String price, String numSeats) {
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("ride[driver]", name));
-		params.add(new BasicNameValuePair("ride[origin]", from));
-		params.add(new BasicNameValuePair("ride[destination]", to));
-		params.add(new BasicNameValuePair("ride[date]",  String.valueOf(dateInMillis)));
-		params.add(new BasicNameValuePair("ride[price]", price));
-		params.add(new BasicNameValuePair("ride[num_passengers]", numSeats));
+		JSONObject json = new JSONObject();
+		try {
+			json.put("driverId", fbid);
+			json.put("origin", from);
+			json.put("destination", to);
+			json.put("datetime", dateInMillis);
+			json.put("numSeats", numSeats);
+			json.put("price", price);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+//		params.add(new BasicNameValuePair("ride[driver]", name));
+//		params.add(new BasicNameValuePair("ride[origin]", from));
+//		params.add(new BasicNameValuePair("ride[destination]", to));
+//		params.add(new BasicNameValuePair("ride[date]",  String.valueOf(dateInMillis)));
+//		params.add(new BasicNameValuePair("ride[price]", price));
+//		params.add(new BasicNameValuePair("ride[num_passengers]", numSeats));
 
 //		params.add(new BasicNameValuePair("authenticity_token", "MD2BswheH6dEGHB20NA3ffj9+50Vjb2aDPcTfNUGbRs="));
 //		params.add(new BasicNameValuePair("commit", "Create user"));
 		
-		new PostRideTask().execute(params);
+		new PostRideTask().execute(json.toString());
 		
 	}
 
-	public class PostRideTask extends AsyncTask<List<NameValuePair>, Void, Boolean> {
+	public class PostRideTask extends AsyncTask<String, Void, Boolean> {
 
 		private HttpClient client = new DefaultHttpClient();
 		
@@ -109,12 +126,12 @@ public class PostActivity extends Activity {
 		}
 		
 		@Override
-		protected Boolean doInBackground(List<NameValuePair>... params) {
+		protected Boolean doInBackground(String... params) {
 			
 			try{
 			// TODO Auto-generated method stub
 			HttpPost post = new HttpPost(POST_RIDE_URL);
-			post.setEntity(new UrlEncodedFormEntity(params[0]));
+			post.setEntity(new StringEntity(params[0]));
 
 			// Execute HTTP Post Request
 			HttpResponse response = client.execute(post);
