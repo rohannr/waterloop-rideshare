@@ -68,7 +68,7 @@ public class SearchActivity extends Activity {
 				// TODO Auto-generated method stub
 				String from = origin.getSelectedItem().toString();
 				String to = destination.getSelectedItem().toString();
-				date = new Date(dp.getYear(), dp.getMonth(), dp.getDayOfMonth()).getTime()/1000;
+				date = new Date(dp.getYear()-1900, dp.getMonth(), dp.getDayOfMonth()+1).getTime()/1000;
 				String[] params = new String[]{ from, to, String.valueOf(date)};
 				//make call to server
 				new searchTask(context).execute(params);
@@ -147,12 +147,14 @@ public class SearchActivity extends Activity {
 					JSONObject jsonObject = jsonSearchResults.getJSONObject(i);
 					String name = jsonObject.getString("driver");
 					String origin = jsonObject.getString("origin");
-					String destination = jsonObject.getString("dest");
+					String destination = jsonObject.getString("destination");
 					String rideID = jsonObject.getString("id");
 					int price = Integer.parseInt(jsonObject.getString("price"));
-					int numSeats = Integer.parseInt(jsonObject.getString("seats"));
-					long date = jsonObject.getLong("date");
-//					JSONArray passengers = (JSONArray) jsonObject.get("passengers");
+					int numSeats = Integer.parseInt(jsonObject.getString("numSeats"));
+					long date = jsonObject.getLong("datetime");
+					JSONArray passengers = (JSONArray) jsonObject.get("passengers");
+					
+					int seatsLeft = numSeats - passengers.length();
 					
 					
 //					System.out.println(name);
@@ -167,7 +169,7 @@ public class SearchActivity extends Activity {
 //					if(passengers.length == 0){
 //						passengers = null;
 //					}
-					Ride ride = new Ride(origin, destination, date, name, null, price, numSeats, rideID);
+					Ride ride = new Ride(origin, destination, date, name, seatsLeft, price, numSeats, rideID);
 					result[i] = ride;
 					
 				} catch (JSONException e) {

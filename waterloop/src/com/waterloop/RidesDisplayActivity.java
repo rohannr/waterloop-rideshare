@@ -17,6 +17,9 @@ public class RidesDisplayActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		Bundle b  = getIntent().getExtras();
 		Parcelable[] rideExtras =  b.getParcelableArray("rides");
+		if (rideExtras == null){
+			return;
+		}
 		System.out.println("Length of parcel: " + rideExtras.length);
 			
 		rides = new Ride[rideExtras.length];

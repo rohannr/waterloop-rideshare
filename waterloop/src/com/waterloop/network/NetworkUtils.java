@@ -54,8 +54,8 @@ public class NetworkUtils {
 				int price = Integer.parseInt(jsonObject.getString("price"));
 				int numSeats = Integer.parseInt(jsonObject.getString("seats"));
 				long date = jsonObject.getLong("date");
-//				JSONArray passengers = (JSONArray) jsonObject.get("passengers");
-				
+				JSONArray passengers = (JSONArray) jsonObject.get("passengers");
+				int seatsLeft = numSeats - passengers.length();
 				
 				System.out.println(name);
 				System.out.println(origin);
@@ -69,7 +69,7 @@ public class NetworkUtils {
 //				if(passengers.length == 0){
 //					passengers = null;
 //				}
-				Ride ride = new Ride(origin, destination, date, name, null, price, numSeats, rideID);
+				Ride ride = new Ride(origin, destination, date, name, seatsLeft, price, numSeats, rideID);
 				result[i] = ride;
 				
 			} catch (JSONException e) {

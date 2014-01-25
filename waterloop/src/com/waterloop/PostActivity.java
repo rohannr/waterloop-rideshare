@@ -69,7 +69,7 @@ public class PostActivity extends Activity {
 				String from = origin.getSelectedItem().toString();
 				String to = destination.getSelectedItem().toString();
 				
-				date = new Date(dp.getYear() - 1900, dp.getMonth(), dp.getDayOfMonth()).getTime()/1000; //divide to get UNIX epoch
+				date = new Date(dp.getYear() - 1900, dp.getMonth(), dp.getDayOfMonth()+1).getTime()/1000; //divide to get UNIX epoch
 				System.out.println(String.valueOf(dp.getYear()) + ':' + String.valueOf(dp.getMonth())+ ':' + String.valueOf(dp.getDayOfMonth()));
 				System.out.println(UserProfileSettings.getUserProfileSettings().getName());
 				System.out.println(from);

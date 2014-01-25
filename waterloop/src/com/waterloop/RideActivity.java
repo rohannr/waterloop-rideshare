@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,6 +44,7 @@ public class RideActivity extends Activity {
 	private String origin;
 	private String destination;
 	private String driverName;
+	private String driverId;
 	private int seatsLeft;
 	private Ride ride;
 
@@ -89,6 +91,16 @@ public class RideActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				new JoinRideTask().execute();
+			}
+		});
+		
+		Button messageButton = (Button) findViewById(R.id.message_driver_button);
+		messageButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://messaging/" + ride.getDriver()));
+				startActivity(i);
 			}
 		});
 
@@ -150,7 +162,7 @@ public class RideActivity extends Activity {
 			loadSpinner.dismiss();
 		}
 	}
-
+	
 	public class JoinRideTask extends AsyncTask<Void, Void, Boolean> {
 
 		private HttpClient client = new DefaultHttpClient();

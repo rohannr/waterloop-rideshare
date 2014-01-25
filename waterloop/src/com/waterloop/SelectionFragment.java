@@ -18,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -84,6 +85,7 @@ public class SelectionFragment extends ListFragment {
 			public void onClick(View v) {
 
 				Intent intent = new Intent(getActivity().getApplicationContext(), PostActivity.class);
+//				Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://messaging/1651620222"));
 				getActivity().startActivity(intent);
 			}
 		});
@@ -232,7 +234,6 @@ public class SelectionFragment extends ListFragment {
 
 			try {
 				HttpPost post = new HttpPost(REGISTER_USER_URL);
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
 				JSONObject json = new JSONObject();
 				try {
 					json.put("name", user);

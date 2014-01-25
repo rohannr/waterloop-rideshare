@@ -11,7 +11,7 @@ public class Ride implements Parcelable{
 	private String origin;
 	private String dest;
 	private long date;
-	private String driver;
+	private String driver; //driver's fbid
 	private String[] passengers;
 	private int numSeats;
 	private int seatsLeft;
@@ -21,16 +21,14 @@ public class Ride implements Parcelable{
 	public static final String RIDE_PARCEL_KEY = "ride";
 
 	public Ride(String origin, String dest, long date, String driver,
-			String[] passengers, int price, int numSeats, String rideId) {
+			int seatsLeft, int price, int numSeats, String rideId) {
 		super();
 		this.origin = origin;
 		this.dest = dest;
 		this.date = date;
 		this.driver = driver;
-		this.passengers = passengers;
 		this.numSeats = numSeats;
-//		this.seatsLeft = numSeats - passengers.length;
-		this.seatsLeft = numSeats;
+		this.seatsLeft = seatsLeft;
 		this.price=price;
 		this.rideId = rideId;
 	}
