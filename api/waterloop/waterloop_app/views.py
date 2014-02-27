@@ -43,7 +43,7 @@ def search(request):
     params = json.loads(request.raw_post_data)
     rideDate = datetime.datetime.fromtimestamp(float(params['datetime']))
     
-    r = [str(ride) for ride in Ride.objects.filter(
+    r = [str(r) for r in Ride.objects.filter(
         origin__icontains=params['origin']
     ).filter(
         destination__icontains=params['destination']
@@ -53,4 +53,4 @@ def search(request):
         datetime__day=rideDate.day
     )]
     
-    return HttpResponse(r)
+    return HttpResponse("[" + ','.join(r) + "]")

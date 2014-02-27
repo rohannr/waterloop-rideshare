@@ -24,6 +24,7 @@ class Ride(models.Model):
         passengers = self.passengers.all()
         passData = [{'fbId' : p.fbId, 'name' : p.name} for p in passengers]
         return json.dumps({'origin' : self.origin,
+'id' : int(self.pk),
 'destination' : self.destination,
 'datetime' : self.datetime.strftime('%s'),
 'driver' : self.driver.fbId,
